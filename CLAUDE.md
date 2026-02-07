@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-lofi-bot-dashboard (v0.1.0) — A desktop dashboard application for managing the lofi Discord bot. Built with Tauri 2.0, React 19, TypeScript, and Rsbuild. Communicates with the lofi-bot via its REST API.
+**lofi-bot-dashboard** (v0.1.0) — A lightweight desktop dashboard for managing [lofi-bot](https://github.com/MeninoNias/lofi-bot), a 24/7 Discord radio bot that streams lofi music to voice channels.
+
+The dashboard provides a visual interface to manage radio stations (CRUD), control playback (play/stop/skip), monitor bot health (uptime, latency, connections), and view listener stats (XP, levels, leaderboards) — replacing the need for Discord `!` commands for administration.
+
+Built with **Tauri 2.0** for a minimal footprint (~5 MB, ~30 MB RAM) and connects to the bot's REST API (Elysia.js) via API key authentication.
 
 - **App identifier**: `com.lofi-bot.dashboard`
 - **Default window**: 1024×768, title "Lofi Bot Dashboard"
@@ -61,9 +65,9 @@ lofi-bot-dashboard/
 | Desktop Runtime | Tauri 2.0 (Rust) |
 | Build Tool | Rsbuild (Rspack/SWC) |
 | Frontend | React 19 + TypeScript |
-| Styling | TBD — Tailwind CSS v4 |
-| UI Components | TBD — shadcn/ui |
-| Routing | TBD — React Router |
+| Styling | Tailwind CSS v4 |
+| UI Components | shadcn/ui |
+| Routing | React Router v7 |
 | Data Fetching | TBD — TanStack Query |
 | State Management | TBD — Zustand |
 
@@ -72,6 +76,21 @@ lofi-bot-dashboard/
 - **This repo is frontend-only** — the bot stays in [lofi-bot](https://github.com/MeninoNias/lofi-bot)
 - **REST API** — dashboard consumes the HTTP API exposed by lofi-bot (Elysia.js)
 - **Tauri commands** — used for local features (system tray, file dialogs, notifications)
+
+### Backend Project — [lofi-bot](https://github.com/MeninoNias/lofi-bot)
+
+The bot is a separate repo. The dashboard consumes its REST API.
+
+- **Runtime**: Bun + TypeScript
+- **HTTP framework**: Elysia.js (exposes REST API)
+- **Bot framework**: Discord.js
+- **Database**: PostgreSQL (Drizzle ORM)
+- **Auth**: API key via header
+- **Bot commands**: `!play`, `!stop`, `!stations`, `!addstation`, `!removestation`, `!setdefault`
+- **API endpoints needed by dashboard**:
+  - `GET/POST/PUT/DELETE /api/stations` — station CRUD
+  - `GET /api/status` — bot status and health
+  - CORS must be enabled in Elysia.js
 
 ### Tauri 2.0 Capabilities
 
@@ -85,6 +104,41 @@ Permissions are defined in `src-tauri/capabilities/default.json`. The default ca
 - **Node.js** (for npm/frontend tooling) — or **Bun** (tauri.conf.json currently references bun)
 - **Rust** (for Tauri/Cargo compilation)
 - Tauri system dependencies: see [Tauri Prerequisites](https://v2.tauri.app/start/prerequisites/)
+
+## GitHub
+
+### Labels
+
+| Label | Description |
+|-------|-------------|
+| `enhancement` | New feature or request |
+| `bug` | Something isn't working |
+| `frontend` | React frontend / UI work |
+| `ui/ux` | UI components, design, and user experience |
+| `api` | REST API integration with lofi-bot |
+| `tauri` | Tauri desktop runtime |
+| `rsbuild` | Rsbuild / Rspack build tooling |
+| `setup` | Project setup and configuration |
+| `architecture` | Project structure and architectural decisions |
+| `ci/cd` | GitHub Actions, builds, and deployment |
+| `documentation` | Improvements or additions to documentation |
+| `blocked` | Blocked by external dependency |
+| `priority: high` | High priority task |
+
+### Milestones
+
+| Milestone | Description |
+|-----------|-------------|
+| `v0.1.0 - Project Foundation` | Tauri 2.0 + React + Rsbuild scaffold, Tailwind CSS + shadcn/ui, basic layout and navigation |
+| `v0.2.0 - Core Dashboard` | Station management UI, bot controls, health monitoring, API client integration |
+| `v0.3.0 - User Features` | User profiles, XP/level display, leaderboards, settings page |
+| `v1.0.0 - Production Release` | System tray, log viewer, multi-platform builds, CI/CD, auto-updates, polished UI |
+
+### Issue Guidelines
+
+- Use labels to categorize issues (combine multiple: e.g. `enhancement` + `frontend` + `ui/ux`)
+- Assign issues to the appropriate milestone based on scope
+- Reference the backend repo when issues involve API integration
 
 ## Release Process
 
