@@ -99,6 +99,44 @@ Permissions are defined in `src-tauri/capabilities/default.json`. The default ca
 - `core:default` — standard Tauri core permissions
 - `core:window:allow-set-title` — allows setting the window title at runtime
 
+## Design System — Monospaced Lofi
+
+A terminal-inspired, monochrome design language. Reference mock: `docs/mock/desiner-system.html`
+
+### Typography
+
+- **Font**: JetBrains Mono (monospace) — all UI text
+- **Weights**: Light (300), Regular (400), Medium (500), Bold (700)
+- **Scale**:
+  - Display: `text-5xl font-bold tracking-tighter`
+  - Section: `text-2xl font-bold uppercase tracking-tight`
+  - Body: `text-sm text-zinc-400 leading-relaxed`
+  - Label: `text-xs font-bold uppercase tracking-widest text-zinc-500`
+
+### Color Palette
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `background-dark` | `#09090b` | Main app background |
+| `card-dark` | `#18181b` | Card/panel surfaces |
+| `sidebar-dark` | `#101012` | Sidebar background |
+| Primary text | `#FFFFFF` | Headings, emphasis |
+| Secondary text | `#94A3B8` | Body text, descriptions |
+| Border | `#27272a` | Card/section borders |
+| Input border | `#3f3f46` | Form input borders |
+| Success | `emerald-500` | Online/live indicators |
+| Glass | `white/10` | Overlay effects |
+
+### Component Patterns
+
+- **Primary button**: `bg-white text-black` with `shadow-white/10`
+- **Secondary button**: `border border-zinc-600 text-white` (outline)
+- **Inputs**: `bg-black border-zinc-700`, focus: `border-white`
+- **Cards**: `bg-card-dark border border-zinc-800 rounded-lg`
+- **Status indicator**: `w-2 h-2 bg-emerald-500 rounded-full animate-pulse`
+- **Station cards**: Grayscale images → colorize on hover
+- **Icons**: Google Material Icons Round, 24px base
+
 ## Prerequisites
 
 - **Node.js** (for npm/frontend tooling) — or **Bun** (tauri.conf.json currently references bun)
