@@ -8,8 +8,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/stores/auth-store";
 
 export function DashboardLayout() {
+  const apiKey = useAuthStore((state) => state.apiKey);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -19,9 +22,19 @@ export function DashboardLayout() {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex flex-1 items-center justify-between">
             <span className="text-sm font-medium">Lofi Bot Dashboard</span>
-            <Badge variant="outline" className="text-muted-foreground">
-              Disconnected
-            </Badge>
+            {apiKey ? (
+              <Badge
+                variant="outline"
+                className="border-emerald-500/50 text-emerald-400"
+              >
+                <span className="mr-1.5 inline-block size-2 rounded-full bg-emerald-500 animate-pulse" />
+                Connected
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="text-muted-foreground">
+                Disconnected
+              </Badge>
+            )}
           </div>
         </header>
         <div className="flex-1 p-6">
