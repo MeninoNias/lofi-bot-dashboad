@@ -5,10 +5,10 @@ import { DashboardLayout } from "@/components/dashboard-layout";
 import { LoginPage } from "@/pages/auth";
 import {
   DashboardPage,
-  StationsPage,
   ControlsPage,
   HealthPage,
 } from "@/pages/dashboard";
+import { StationsPage } from "@/pages/stations";
 import { ProfilesPage, LeaderboardPage } from "@/pages/users";
 import { SettingsPage } from "@/pages/settings";
 

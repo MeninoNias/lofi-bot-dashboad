@@ -11,7 +11,7 @@ import {
 export const stationKeys = {
   all: ["stations"] as const,
   list: () => [...stationKeys.all, "list"] as const,
-  detail: (id: string) => [...stationKeys.all, "detail", id] as const,
+  detail: (id: number) => [...stationKeys.all, "detail", id] as const,
 };
 
 export function useStations() {
@@ -21,7 +21,7 @@ export function useStations() {
   });
 }
 
-export function useStation(id: string) {
+export function useStation(id: number) {
   return useQuery({
     queryKey: stationKeys.detail(id),
     queryFn: () => getStation(id),
@@ -42,7 +42,7 @@ export function useCreateStation() {
 export function useDeleteStation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => deleteStation(id),
+    mutationFn: (id: number) => deleteStation(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: stationKeys.all });
     },
@@ -52,7 +52,7 @@ export function useDeleteStation() {
 export function useSetDefaultStation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => setDefaultStation(id),
+    mutationFn: (id: number) => setDefaultStation(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: stationKeys.all });
     },

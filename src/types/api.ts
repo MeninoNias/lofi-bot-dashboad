@@ -22,9 +22,10 @@ export interface HealthStatus {
 }
 
 export interface Station {
-  id: string;
+  id: number;
   name: string;
   url: string;
+  description: string | null;
   isDefault: boolean;
   createdAt: string;
   updatedAt: string;
@@ -33,6 +34,7 @@ export interface Station {
 export interface CreateStationInput {
   name: string;
   url: string;
+  description?: string;
 }
 
 export interface UserProfile {

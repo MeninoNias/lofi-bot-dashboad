@@ -41,7 +41,21 @@ npx tauri icon <png>     # Generate app icons from source image
 lofi-bot-dashboard/
 ├── src/                       # React frontend
 │   ├── main.tsx               # React entry point (renders into #root)
-│   └── App.tsx                # App root component
+│   ├── App.tsx                # App root component (router)
+│   ├── components/            # Reusable UI components
+│   │   ├── ui/                # shadcn/ui primitives
+│   │   └── stations/          # Station-specific components (dialogs, sheets)
+│   ├── hooks/                 # React Query hooks (use-stations, etc.)
+│   ├── lib/                   # Utilities (api-client)
+│   ├── pages/                 # Route pages (one directory per domain)
+│   │   ├── auth/              # Login page
+│   │   ├── dashboard/         # Overview, controls, health
+│   │   ├── stations/          # Station management (CRUD)
+│   │   ├── users/             # Profiles, leaderboard
+│   │   └── settings/          # App settings
+│   ├── services/              # API service functions (station-service, etc.)
+│   ├── stores/                # Zustand stores (auth-store)
+│   └── types/                 # TypeScript types (api.ts)
 ├── src-tauri/                 # Tauri / Rust backend
 │   ├── src/
 │   │   ├── main.rs            # Tauri entry point (calls lib::run)
@@ -52,11 +66,26 @@ lofi-bot-dashboard/
 │   ├── build.rs               # Tauri build script
 │   ├── Cargo.toml             # Rust dependencies
 │   └── tauri.conf.json        # Tauri configuration
+├── docs/mock/                 # HTML design mocks (reference only)
 ├── index.html                 # HTML template
 ├── rsbuild.config.ts          # Rsbuild configuration
 ├── tsconfig.json              # TypeScript configuration
 └── package.json               # Node.js dependencies & scripts
 ```
+
+### Page Organization
+
+Pages are organized **by domain**, not nested under a single `dashboard/` directory. Each domain gets its own directory under `src/pages/`:
+
+| Directory | Pages | Description |
+|-----------|-------|-------------|
+| `pages/auth/` | Login | Authentication flow |
+| `pages/dashboard/` | Overview, Controls, Health | General bot monitoring |
+| `pages/stations/` | Stations | Station CRUD management |
+| `pages/users/` | Profiles, Leaderboard | User stats and rankings |
+| `pages/settings/` | Settings | App configuration |
+
+Each directory has an `index.ts` barrel export. Routes are defined in `App.tsx`.
 
 ### Key Technologies
 

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard Skeleton Loading State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background-dark": "#09090b", 
+                        "card-dark": "#18181b", 
+                        "sidebar-dark": "#101012", 
+                        "skeleton-base": "#27272a",
+                        "skeleton-highlight": "#3f3f46",
+                    },
+                    fontFamily: {
+                        sans: ["JetBrains Mono", "monospace"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    animation: {
+                        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .grid-bg {
+            background-size: 20px 20px;
+            background-image: radial-gradient(#27272a 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-200 h-screen flex overflow-hidden selection:bg-white selection:text-black">
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none z-0"></div>
+<aside class="w-20 border-r border-zinc-800 bg-sidebar-dark flex flex-col items-center py-6 z-10 shrink-0">
+<div class="w-10 h-10 rounded bg-skeleton-base animate-pulse mb-10"></div>
+<div class="flex flex-col gap-6 w-full items-center">
+<div class="w-6 h-6 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-6 h-6 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+<div class="w-6 h-6 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+<div class="w-6 h-6 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+</div>
+<div class="mt-auto flex flex-col gap-6 w-full items-center">
+<div class="w-6 h-6 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+<div class="w-8 h-8 rounded-full bg-skeleton-base animate-pulse"></div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full relative z-10 overflow-hidden">
+<header class="h-16 border-b border-zinc-800 bg-background-dark/50 backdrop-blur-sm flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-4">
+<div class="w-32 h-4 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-24 h-8 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+<div class="max-w-7xl mx-auto space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-20 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-4 h-4 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-16 h-8 rounded bg-skeleton-base animate-pulse mb-2"></div>
+<div class="w-24 h-3 rounded bg-skeleton-base animate-pulse opacity-60"></div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-24 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-4 h-4 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-16 h-8 rounded bg-skeleton-base animate-pulse mb-2"></div>
+<div class="w-28 h-3 rounded bg-skeleton-base animate-pulse opacity-60"></div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-16 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-4 h-4 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-16 h-8 rounded bg-skeleton-base animate-pulse mb-2"></div>
+<div class="w-20 h-3 rounded bg-skeleton-base animate-pulse opacity-60"></div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-20 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-4 h-4 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-16 h-8 rounded bg-skeleton-base animate-pulse mb-2"></div>
+<div class="w-24 h-3 rounded bg-skeleton-base animate-pulse opacity-60"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-card-dark border border-zinc-800 rounded-lg p-6 flex flex-col h-[400px]">
+<div class="flex justify-between items-center mb-6">
+<div class="w-32 h-4 rounded bg-skeleton-base animate-pulse"></div>
+<div class="flex gap-2">
+<div class="w-16 h-8 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-16 h-8 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+</div>
+<div class="flex-1 flex items-end justify-between gap-2 px-4 pb-2">
+<div class="w-full bg-skeleton-base/30 rounded-t animate-pulse" style="height: 40%"></div>
+<div class="w-full bg-skeleton-base/50 rounded-t animate-pulse" style="height: 65%"></div>
+<div class="w-full bg-skeleton-base/30 rounded-t animate-pulse" style="height: 45%"></div>
+<div class="w-full bg-skeleton-base/60 rounded-t animate-pulse" style="height: 80%"></div>
+<div class="w-full bg-skeleton-base/40 rounded-t animate-pulse" style="height: 55%"></div>
+<div class="w-full bg-skeleton-base/30 rounded-t animate-pulse" style="height: 35%"></div>
+<div class="w-full bg-skeleton-base/50 rounded-t animate-pulse" style="height: 70%"></div>
+<div class="w-full bg-skeleton-base/30 rounded-t animate-pulse" style="height: 45%"></div>
+<div class="w-full bg-skeleton-base/70 rounded-t animate-pulse" style="height: 90%"></div>
+<div class="w-full bg-skeleton-base/40 rounded-t animate-pulse" style="height: 60%"></div>
+</div>
+<div class="flex justify-between mt-4 px-2">
+<div class="w-8 h-2 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-8 h-2 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-8 h-2 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-8 h-2 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-8 h-2 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6 h-[188px]">
+<div class="w-24 h-4 rounded bg-skeleton-base animate-pulse mb-6"></div>
+<div class="flex items-center justify-center h-24">
+<div class="w-20 h-20 rounded-full border-4 border-skeleton-base animate-pulse"></div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6 h-[188px] flex flex-col">
+<div class="w-28 h-4 rounded bg-skeleton-base animate-pulse mb-5"></div>
+<div class="space-y-4 flex-1">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-skeleton-base animate-pulse"></div>
+<div class="flex-1 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-10 h-3 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-skeleton-base animate-pulse"></div>
+<div class="flex-1 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-10 h-3 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-skeleton-base animate-pulse"></div>
+<div class="w-2/3 h-3 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-10 h-3 rounded bg-skeleton-base animate-pulse opacity-50"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6">
+<div class="flex justify-between items-center mb-6">
+<div class="w-36 h-4 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-24 h-8 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 pb-4 border-b border-zinc-800/50">
+<div class="w-1/4 h-3 rounded bg-skeleton-base animate-pulse opacity-70"></div>
+<div class="w-1/4 h-3 rounded bg-skeleton-base animate-pulse opacity-70"></div>
+<div class="w-1/4 h-3 rounded bg-skeleton-base animate-pulse opacity-70"></div>
+<div class="w-1/4 h-3 rounded bg-skeleton-base animate-pulse opacity-70"></div>
+</div>
+<div class="flex gap-4 py-2 border-b border-zinc-800/30">
+<div class="w-1/4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-24 h-3 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center">
+<div class="w-16 h-3 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center">
+<div class="w-12 h-6 rounded-full bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center justify-end">
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+</div>
+<div class="flex gap-4 py-2 border-b border-zinc-800/30">
+<div class="w-1/4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-20 h-3 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center">
+<div class="w-20 h-3 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center">
+<div class="w-12 h-6 rounded-full bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center justify-end">
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+</div>
+<div class="flex gap-4 py-2 border-b border-zinc-800/30">
+<div class="w-1/4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+<div class="w-28 h-3 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center">
+<div class="w-14 h-3 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center">
+<div class="w-12 h-6 rounded-full bg-skeleton-base animate-pulse"></div>
+</div>
+<div class="w-1/4 flex items-center justify-end">
+<div class="w-8 h-8 rounded bg-skeleton-base animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

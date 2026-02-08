@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Radio Station Management - Lofi Bot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#F8FAFC", 
+                        secondary: "#94A3B8",
+                        "background-light": "#F1F5F9",
+                        "background-dark": "#09090b", 
+                        "card-dark": "#18181b", 
+                        "sidebar-dark": "#101012", 
+                        "accent-gray": "#475569",
+                    },
+                    fontFamily: {
+                        sans: ["JetBrains Mono", "monospace"],
+                        display: ["JetBrains Mono", "monospace"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "4px",
+                        'lg': '8px',
+                        'xl': '12px',
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-200 min-h-screen flex custom-scrollbar selection:bg-white selection:text-black overflow-hidden">
+<aside class="w-64 fixed h-screen bg-sidebar-dark border-r border-zinc-800 flex flex-col z-20">
+<div class="p-8 border-b border-zinc-800">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-2xl text-white">terminal</span>
+<div>
+<h1 class="font-bold text-white text-sm tracking-tight">LOFI BOT</h1>
+<p class="text-[10px] text-zinc-500 uppercase tracking-widest">Dashboard v2.4</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors" href="#">
+<span class="material-icons-round text-base">grid_view</span> Overview
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded bg-zinc-800 text-white shadow-lg shadow-black/20 border border-zinc-700/50" href="#">
+<span class="material-icons-round text-base">radio</span> Stations
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors" href="#">
+<span class="material-icons-round text-base">library_music</span> Library
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors" href="#">
+<span class="material-icons-round text-base">schedule</span> Schedules
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors" href="#">
+<span class="material-icons-round text-base">group</span> Listeners
+            </a>
+<div class="pt-4 mt-4 border-t border-zinc-800/50">
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors" href="#">
+<span class="material-icons-round text-base">settings</span> Settings
+                </a>
+</div>
+</nav>
+<div class="p-4 border-t border-zinc-800">
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+<span class="material-icons-round text-emerald-500 text-sm">wifi</span>
+</div>
+<div>
+<p class="text-xs font-bold text-white">Bot Online</p>
+<p class="text-[10px] text-emerald-500">Ping: 24ms</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 ml-64 p-8 lg:p-12 w-full h-screen overflow-hidden flex flex-col relative">
+<header class="flex justify-between items-start mb-8 shrink-0">
+<div>
+<div class="inline-block px-2 py-1 bg-zinc-800 rounded text-[10px] uppercase tracking-widest text-zinc-400 mb-2 border border-zinc-700">Management</div>
+<h1 class="text-3xl font-bold text-white tracking-tight">Radio Stations</h1>
+</div>
+<button class="flex items-center gap-2 bg-white text-black hover:bg-zinc-200 transition-colors px-4 py-3 rounded text-sm font-bold uppercase tracking-wide shadow-lg shadow-white/10 group relative">
+<span class="material-icons-round text-base">add</span>
+                Add New Station
+            </button>
+</header>
+<div class="mb-6 shrink-0 relative max-w-lg">
+<input class="w-full bg-black border border-zinc-800 rounded p-3 pl-10 text-sm text-white placeholder-zinc-600 focus:border-white focus:ring-0 transition-colors" placeholder="Search stations by name or tag..." type="text"/>
+<span class="material-icons-round absolute left-3 top-3 text-zinc-500">search</span>
+</div>
+<div class="flex-1 overflow-auto custom-scrollbar border border-zinc-800 rounded-lg bg-card-dark relative">
+<table class="w-full text-left border-collapse">
+<thead class="bg-zinc-900 sticky top-0 z-10">
+<tr>
+<th class="py-4 px-6 text-xs font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-800 w-[60px] text-center">Def</th>
+<th class="py-4 px-6 text-xs font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-800">Station</th>
+<th class="py-4 px-6 text-xs font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-800">Stream URL</th>
+<th class="py-4 px-6 text-xs font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-800">Status</th>
+<th class="py-4 px-6 text-xs font-bold text-zinc-500 uppercase tracking-widest border-b border-zinc-800 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-zinc-800">
+<tr class="group hover:bg-zinc-800/30 transition-colors bg-zinc-800/20">
+<td class="py-4 px-6 text-center">
+<span class="material-icons-round text-yellow-500 text-sm" title="Default Station">star</span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700">
+<img alt="Station Art" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIDgunVE5nF2QS022tIlOqZBJ2qERAzCtomDCIOv24VPQAiB0ehpySPzpAsL5hhMUueD_RFHD9hJzHgtx19M09d1ZjHfvB5tdTHm_7VkMjxM9ARXlvWU4z9N1JQIsQqZ30o-DG_9ymCrjrJdeCi5ImG1TAxat8WVqDxzVio6lnahkW0G4qDPT80xexVIhJ0Jy0MCo2Zk1Ur9kUW29piG390Ocl_LvpBv9btm48VNEoUy0u3CqfXjbb2E760JwbhkABCXNrQvpSwqc"/>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">Midnight Chill</h4>
+<span class="text-[10px] text-zinc-500 uppercase tracking-wide">ID: #8392</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<code class="text-xs text-zinc-400 bg-black px-2 py-1 rounded border border-zinc-800 font-mono">https://stream.lofi.bot/midnight</code>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Live</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-white hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-zinc-500 hover:text-red-400 hover:bg-zinc-700 rounded transition-colors group/delete">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-zinc-800/30 transition-colors">
+<td class="py-4 px-6 text-center">
+<span class="material-icons-round text-zinc-700 text-sm group-hover:text-zinc-600 transition-colors cursor-pointer hover:!text-yellow-500/50">star_border</span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700">
+<img alt="Station Art" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAzchnP347RMrF3zq10BuZjU_kbuVkAaBVDaZXAtg51UWH0-4sYnXw12hlOaAxTsobGq2Y7yWWMNUi5xLdckOZ-aYOcdDiDZ9kSy948_qB2m4xjsk0nLbASqnxdzrd__wrREJdWe9NreVjAhDTBtXhjhljVi2_2C3eQIRhNX_VZ9b_UutQ9aUWOOruH5c_G0i-RwFG9m3oT7B46WOne__ogWN1I7ejPfsNcVz0R6kvvdwV7BGgbHxorSljfNpcfEaegzPFyvtOwPM"/>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white">Rainy Nights</h4>
+<span class="text-[10px] text-zinc-500 uppercase tracking-wide">ID: #2291</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<code class="text-xs text-zinc-500 bg-black px-2 py-1 rounded border border-zinc-800 font-mono">https://stream.lofi.bot/rain</code>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Live</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-zinc-500 hover:text-red-400 hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-zinc-800/30 transition-colors">
+<td class="py-4 px-6 text-center">
+<span class="material-icons-round text-zinc-700 text-sm group-hover:text-zinc-600 transition-colors cursor-pointer hover:!text-yellow-500/50">star_border</span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700 flex items-center justify-center">
+<span class="material-icons-round text-zinc-600 text-lg">music_note</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-zinc-400 group-hover:text-white transition-colors">Code &amp; Coffee</h4>
+<span class="text-[10px] text-zinc-600 uppercase tracking-wide">ID: #9912</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<code class="text-xs text-zinc-600 bg-zinc-900/50 px-2 py-1 rounded border border-zinc-800/50 font-mono">https://stream.lofi.bot/coffee</code>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-zinc-800 border border-zinc-700 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
+<span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Offline</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-zinc-500 hover:text-red-400 hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-zinc-800/30 transition-colors">
+<td class="py-4 px-6 text-center">
+<span class="material-icons-round text-zinc-700 text-sm group-hover:text-zinc-600 transition-colors cursor-pointer hover:!text-yellow-500/50">star_border</span>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700 flex items-center justify-center">
+<span class="material-icons-round text-zinc-600 text-lg">album</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-zinc-400 group-hover:text-white transition-colors">Retro Synth</h4>
+<span class="text-[10px] text-zinc-600 uppercase tracking-wide">ID: #1024</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<code class="text-xs text-zinc-600 bg-zinc-900/50 px-2 py-1 rounded border border-zinc-800/50 font-mono">https://stream.lofi.bot/synth</code>
+</td>
+<td class="py-4 px-6">
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-zinc-800 border border-zinc-700 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
+<span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Offline</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">edit</span>
+</button>
+<button class="p-2 text-zinc-500 hover:text-red-400 hover:bg-zinc-700 rounded transition-colors">
+<span class="material-icons-round text-sm">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="hidden flex flex-col items-center justify-center py-16 text-zinc-500">
+<div class="w-20 h-20 rounded-full bg-zinc-800/50 border border-zinc-700 flex items-center justify-center mb-4">
+<span class="material-icons-round text-3xl text-zinc-600">wifi_off</span>
+</div>
+<h3 class="text-white font-bold text-lg mb-1">No stations found</h3>
+<p class="text-sm max-w-xs text-center">We couldn't find any radio stations matching your search. Try adding a new one.</p>
+</div>
+</div>
+<div class="mt-4 flex justify-between items-center text-xs text-zinc-500 shrink-0">
+<span>Showing 1-4 of 12 stations</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-zinc-800 border border-zinc-700 rounded hover:text-white transition-colors disabled:opacity-50">Prev</button>
+<button class="px-3 py-1 bg-zinc-800 border border-zinc-700 rounded hover:text-white transition-colors">Next</button>
+</div>
+</div>
+<div class="absolute inset-0 z-40 bg-black/50 backdrop-blur-sm pointer-events-none opacity-100 transition-opacity"></div>
+<aside class="absolute top-0 right-0 h-full w-[400px] bg-card-dark border-l border-zinc-800 shadow-2xl z-50 flex flex-col pointer-events-auto transform transition-transform duration-300">
+<div class="p-8 border-b border-zinc-800 flex justify-between items-center">
+<div>
+<h2 class="text-lg font-bold text-white tracking-tight">Edit Station</h2>
+<p class="text-[10px] text-zinc-500 uppercase tracking-widest mt-1">ID: #8392</p>
+</div>
+<button class="text-zinc-500 hover:text-white transition-colors">
+<span class="material-icons-round">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-8 space-y-6">
+<div class="flex items-center gap-4 bg-black p-4 rounded border border-zinc-800">
+<img class="w-16 h-16 rounded object-cover border border-zinc-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIDgunVE5nF2QS022tIlOqZBJ2qERAzCtomDCIOv24VPQAiB0ehpySPzpAsL5hhMUueD_RFHD9hJzHgtx19M09d1ZjHfvB5tdTHm_7VkMjxM9ARXlvWU4z9N1JQIsQqZ30o-DG_9ymCrjrJdeCi5ImG1TAxat8WVqDxzVio6lnahkW0G4qDPT80xexVIhJ0Jy0MCo2Zk1Ur9kUW29piG390Ocl_LvpBv9btm48VNEoUy0u3CqfXjbb2E760JwbhkABCXNrQvpSwqc"/>
+<div>
+<span class="text-[10px] text-zinc-500 uppercase tracking-widest block mb-1">Current Preview</span>
+<div class="h-1 w-24 bg-zinc-800 rounded overflow-hidden">
+<div class="h-full bg-emerald-500 w-2/3 animate-pulse"></div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Station Name</label>
+<input class="w-full bg-black border border-zinc-700 rounded p-3 text-sm text-white focus:border-white focus:ring-0 transition-colors" type="text" value="Midnight Chill"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Stream URL</label>
+<div class="relative">
+<input class="w-full bg-black border border-red-900/50 rounded p-3 pr-10 text-sm text-white font-mono focus:border-red-500 focus:ring-0 transition-colors" type="text" value="https://stream.lofi.bot/invalid..."/>
+<span class="material-icons-round absolute right-3 top-3 text-red-500 text-sm" title="Invalid Stream">error</span>
+</div>
+<p class="text-[10px] text-red-400 mt-1.5 flex items-center gap-1">
+<span class="material-icons-round text-[10px]">warning</span> Connection failed: invalid stream source
+                        </p>
+</div>
+<div>
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Thumbnail URL</label>
+<input class="w-full bg-black border border-zinc-700 rounded p-3 text-sm text-zinc-400 focus:border-white focus:ring-0 transition-colors" type="text" value="https://assets.lofi.bot/covers/midnight.jpg"/>
+</div>
+<div class="pt-2">
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Status</label>
+<select class="w-full bg-black border border-zinc-700 rounded p-3 text-sm text-white focus:border-white focus:ring-0 transition-colors">
+<option selected="" value="active">Active / Live</option>
+<option value="maintenance">Maintenance</option>
+<option value="offline">Offline</option>
+</select>
+</div>
+<div class="pt-4 border-t border-zinc-800 mt-6">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-sm font-bold text-white">Default Station</h4>
+<p class="text-[10px] text-zinc-500 max-w-[200px]">Auto-play this station when bot joins a new server.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-zinc-400 after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600 peer-checked:after:bg-white"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<div class="p-8 border-t border-zinc-800 bg-zinc-900/30">
+<div class="grid grid-cols-2 gap-4">
+<button class="px-4 py-3 rounded text-sm font-bold uppercase tracking-wide border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors">
+                        Cancel
+                    </button>
+<button class="bg-white text-black hover:bg-zinc-200 transition-colors px-4 py-3 rounded text-sm font-bold uppercase tracking-wide shadow-lg shadow-white/10">
+                        Save Changes
+                    </button>
+</div>
+</div>
+</aside>
+<div class="absolute inset-0 z-[60] flex items-center justify-center pointer-events-none hidden">
+<div class="bg-card-dark border border-zinc-800 p-8 rounded-lg shadow-2xl w-[400px] pointer-events-auto">
+<div class="flex items-center justify-center w-12 h-12 rounded-full bg-red-500/10 mb-4 mx-auto">
+<span class="material-icons-round text-red-500">delete_forever</span>
+</div>
+<h3 class="text-lg font-bold text-white text-center mb-2">Delete Station?</h3>
+<p class="text-sm text-zinc-400 text-center mb-6">Are you sure you want to delete <span class="text-white font-mono">Midnight Chill</span>? This action cannot be undone.</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="px-4 py-3 rounded text-sm font-bold uppercase tracking-wide border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors">Cancel</button>
+<button class="bg-red-600 text-white hover:bg-red-500 transition-colors px-4 py-3 rounded text-sm font-bold uppercase tracking-wide shadow-lg shadow-red-900/20">Delete</button>
+</div>
+</div>
+</div>
+<div class="absolute inset-0 z-[60] flex items-center justify-center pointer-events-none hidden">
+<div class="bg-card-dark border border-zinc-800 rounded-lg shadow-2xl w-[500px] pointer-events-auto flex flex-col max-h-[90vh]">
+<div class="p-6 border-b border-zinc-800 flex justify-between items-center">
+<h2 class="text-lg font-bold text-white tracking-tight">Add New Station</h2>
+<button class="text-zinc-500 hover:text-white transition-colors">
+<span class="material-icons-round">close</span>
+</button>
+</div>
+<div class="p-6 space-y-4 overflow-y-auto">
+<div>
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Station Name</label>
+<input class="w-full bg-black border border-zinc-700 rounded p-3 text-sm text-white focus:border-white focus:ring-0 transition-colors" placeholder="e.g. Lofi Hip Hop Radio" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Stream URL</label>
+<input class="w-full bg-black border border-zinc-700 rounded p-3 text-sm text-white font-mono focus:border-white focus:ring-0 transition-colors" placeholder="https://..." type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Thumbnail URL</label>
+<input class="w-full bg-black border border-zinc-700 rounded p-3 text-sm text-zinc-400 focus:border-white focus:ring-0 transition-colors" placeholder="https://..." type="text"/>
+</div>
+</div>
+<div class="p-6 border-t border-zinc-800 bg-zinc-900/30 grid grid-cols-2 gap-4">
+<button class="px-4 py-3 rounded text-sm font-bold uppercase tracking-wide border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors">Cancel</button>
+<button class="bg-white text-black hover:bg-zinc-200 transition-colors px-4 py-3 rounded text-sm font-bold uppercase tracking-wide shadow-lg shadow-white/10">Create Station</button>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

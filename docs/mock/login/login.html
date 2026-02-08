@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lofi Bot API Key Login Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#F8FAFC", 
+                        secondary: "#94A3B8",
+                        "background-light": "#F1F5F9",
+                        "background-dark": "#09090b", 
+                        "card-dark": "#18181b", 
+                        "sidebar-dark": "#101012", 
+                        "accent-gray": "#475569",
+                        "mono-50": "#f9fafb",
+                        "mono-100": "#f3f4f6",
+                        "mono-200": "#e5e7eb",
+                        "mono-300": "#d1d5db",
+                        "mono-400": "#9ca3af",
+                        "mono-500": "#6b7280",
+                        "mono-600": "#4b5563",
+                        "mono-700": "#374151",
+                        "mono-800": "#1f2937",
+                        "mono-900": "#111827",
+                    },
+                    fontFamily: {
+                        sans: ["JetBrains Mono", "monospace"],
+                        display: ["JetBrains Mono", "monospace"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "4px",
+                        'lg': '8px',
+                        'xl': '12px',
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .grid-bg {
+            background-size: 20px 20px;
+            background-image: radial-gradient(#27272a 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-200 min-h-screen flex items-center justify-center relative custom-scrollbar selection:bg-white selection:text-black overflow-hidden">
+<div class="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-background-dark pointer-events-none"></div>
+<main class="w-full max-w-sm p-4 relative z-10 flex flex-col items-center">
+<div class="w-full bg-background-dark border border-zinc-800 rounded-lg p-8 shadow-2xl relative">
+<div class="flex flex-col items-center mb-10">
+<div class="w-12 h-12 flex items-center justify-center text-white mb-4">
+<span class="material-icons-round text-3xl">headphones</span>
+</div>
+<h1 class="text-lg font-bold text-white tracking-[0.15em]">LOFI-BOT AUTH</h1>
+</div>
+<form class="space-y-6" onsubmit="event.preventDefault()">
+<div class="space-y-2">
+<label class="block text-[10px] uppercase tracking-widest text-zinc-500 font-bold">API Key</label>
+<input class="w-full bg-card-dark border border-zinc-800 rounded text-sm p-3 text-white placeholder-zinc-600 focus:border-white focus:ring-0 transition-colors font-mono" placeholder="••••••••••••••••" type="password"/>
+</div>
+<div class="pt-2">
+<button class="w-full bg-white text-black hover:bg-zinc-200 transition-colors py-3 rounded text-xs font-bold uppercase tracking-widest shadow-lg shadow-white/5" type="submit">
+                        Connect to Bot
+                    </button>
+</div>
+</form>
+</div>
+<div class="mt-8 text-center">
+<p class="text-[10px] text-zinc-500 uppercase tracking-wider">
+                Authentication via Elysia.js REST API
+            </p>
+</div>
+</main>
+</body></html>
