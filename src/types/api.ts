@@ -58,3 +58,31 @@ export interface ApiErrorResponse {
   error: string;
   statusCode: number;
 }
+
+export interface GuildAudioState {
+  isPlaying: boolean;
+  currentStation: { id: number; name: string } | null;
+  channelId: string | null;
+  channelName: string | null;
+  listenerCount: number;
+  connectedSince: string | null;
+}
+
+export interface VoiceChannel {
+  id: string;
+  name: string;
+}
+
+export interface GuildStatus {
+  guildId: string;
+  name: string;
+  iconUrl: string | null;
+  memberCount: number;
+  audio: GuildAudioState;
+  voiceChannels: VoiceChannel[];
+}
+
+export interface PlayInGuildInput {
+  stationId: number;
+  channelId: string;
+}
