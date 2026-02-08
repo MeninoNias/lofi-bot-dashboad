@@ -8,10 +8,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useAuthStore } from "@/stores/auth-store";
+import { useHealth } from "@/hooks/use-health";
 
 export function DashboardLayout() {
-  const apiKey = useAuthStore((state) => state.apiKey);
+  const { data: health, isLoading, isError } = useHealth();
 
   return (
     <SidebarProvider>
@@ -22,7 +22,11 @@ export function DashboardLayout() {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex flex-1 items-center justify-between">
             <span className="text-sm font-medium">Lofi Bot Dashboard</span>
-            {apiKey ? (
+            {isLoading ? (
+              <Badge variant="outline" className="text-muted-foreground">
+                <span className="animate-pulse">Checking...</span>
+              </Badge>
+            ) : health?.status === "healthy" ? (
               <Badge
                 variant="outline"
                 className="border-emerald-500/50 text-emerald-400"
@@ -31,7 +35,7 @@ export function DashboardLayout() {
                 Connected
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-muted-foreground">
+              <Badge variant="outline" className="text-red-400 border-red-500/50">
                 Disconnected
               </Badge>
             )}

@@ -3,10 +3,12 @@ import { Navigate, useNavigate } from "react-router";
 import { Headphones } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { ApiError } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/stores/auth-store";
+import { validateApiKey } from "@/services/health-service";
 
 export default function LoginPage() {
   const [keyInput, setKeyInput] = useState("");
@@ -32,12 +34,23 @@ export default function LoginPage() {
 
     setIsLoading(true);
 
-    // TODO: validate against lofi-bot REST API (GET /api/status)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    setApiKey(keyInput.trim());
-    setIsLoading(false);
-    navigate("/", { replace: true });
+    try {
+      await validateApiKey(keyInput.trim());
+      setApiKey(keyInput.trim());
+      navigate("/", { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(
+          err.statusCode === 401
+            ? "Invalid API key."
+            : "Cannot reach bot API.",
+        );
+      } else {
+        setError("Cannot reach bot API.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
