@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Health Monitoring Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#F8FAFC", 
+                        secondary: "#94A3B8",
+                        "background-light": "#F1F5F9",
+                        "background-dark": "#09090b", 
+                        "card-dark": "#18181b", 
+                        "sidebar-dark": "#101012", 
+                        "accent-gray": "#475569",
+                        "mono-50": "#f9fafb",
+                        "mono-100": "#f3f4f6",
+                        "mono-200": "#e5e7eb",
+                        "mono-300": "#d1d5db",
+                        "mono-400": "#9ca3af",
+                        "mono-500": "#6b7280",
+                        "mono-600": "#4b5563",
+                        "mono-700": "#374151",
+                        "mono-800": "#1f2937",
+                        "mono-900": "#111827",
+                    },
+                    fontFamily: {
+                        sans: ["JetBrains Mono", "monospace"],
+                        display: ["JetBrains Mono", "monospace"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "4px",
+                        'lg': '8px',
+                        'xl': '12px',
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .waveform-bar {
+            width: 3px;
+            background: #10B981;
+            border-radius: 1px;
+            animation: bounce 1.2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { height: 10px; }
+            50% { height: 25px; }
+        }
+        .grid-bg {
+            background-size: 20px 20px;
+            background-image: radial-gradient(#333 1px, transparent 1px);
+        }
+        .animate-ping-slow {
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-200 min-h-screen flex custom-scrollbar selection:bg-emerald-500 selection:text-white">
+<aside class="w-64 fixed h-screen bg-sidebar-dark border-r border-zinc-800 flex flex-col z-20">
+<div class="p-8 border-b border-zinc-800">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-2xl text-emerald-500">terminal</span>
+<div>
+<h1 class="font-bold text-white text-sm tracking-tight">LOFI BOT</h1>
+<p class="text-[10px] text-zinc-500 uppercase tracking-widest">v2.4.1 Stable</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded bg-zinc-800 text-white border border-zinc-700 transition-colors" href="#">
+<span class="material-icons-round text-base text-emerald-500">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">analytics</span> Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">queue_music</span> Audio Queue
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">settings</span> Configuration
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">history</span> Logs
+            </a>
+</nav>
+<div class="p-4 border-t border-zinc-800">
+<div class="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded flex items-center gap-3">
+<div class="relative">
+<div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+<div class="absolute inset-0 bg-emerald-500 rounded-full animate-ping-slow opacity-75"></div>
+</div>
+<div class="flex-1">
+<div class="text-[10px] text-zinc-500 uppercase font-bold">Bot Status</div>
+<div class="text-xs text-white font-mono">Online</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 ml-64 p-8 lg:p-12 max-w-7xl mx-auto w-full">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 border-b border-zinc-800 pb-6">
+<div>
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-zinc-900 border border-zinc-700 rounded mb-2">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+<span class="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">System Healthy</span>
+</div>
+<h1 class="text-3xl font-bold text-white tracking-tight">SYSTEM HEALTH MONITOR</h1>
+</div>
+<div class="text-right">
+<div class="text-xs text-zinc-500 uppercase tracking-widest mb-1">Last Checked</div>
+<div class="text-xl text-white font-mono flex items-center gap-2 justify-end">
+<span class="material-icons-round text-base text-zinc-600">sync</span>
+                    12:45:02
+                </div>
+</div>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6 relative overflow-hidden group hover:border-zinc-600 transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-white">discord</span>
+</div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Discord API</h3>
+<span class="material-icons-round text-emerald-500 text-sm">wifi</span>
+</div>
+<div class="mb-4">
+<div class="text-2xl font-bold text-white">CONNECTED</div>
+</div>
+<div class="grid grid-cols-2 gap-4 border-t border-zinc-800 pt-4 mt-2">
+<div>
+<div class="text-[10px] text-zinc-500 uppercase">Latency</div>
+<div class="text-sm text-emerald-400 font-bold">45ms</div>
+</div>
+<div>
+<div class="text-[10px] text-zinc-500 uppercase">Guilds</div>
+<div class="text-sm text-white font-bold">5</div>
+</div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6 relative overflow-hidden group hover:border-zinc-600 transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-white">storage</span>
+</div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Database</h3>
+<span class="material-icons-round text-emerald-500 text-sm">check_circle</span>
+</div>
+<div class="mb-4">
+<div class="text-2xl font-bold text-white">CONNECTED</div>
+</div>
+<div class="border-t border-zinc-800 pt-4 mt-2">
+<div class="flex items-center gap-2 text-xs text-zinc-400">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                        Pool Active
+                    </div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6 relative overflow-hidden group hover:border-zinc-600 transition-colors">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Audio Stream</h3>
+<span class="material-icons-round text-emerald-500 text-sm">graphic_eq</span>
+</div>
+<div class="mb-2">
+<div class="text-2xl font-bold text-white">2 ACTIVE</div>
+<div class="text-xs text-zinc-500 mt-1">Voice Connections</div>
+</div>
+<div class="h-12 flex items-end gap-1 mt-4">
+<div class="waveform-bar h-4" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar h-8" style="animation-delay: 0.3s"></div>
+<div class="waveform-bar h-6" style="animation-delay: 0.5s"></div>
+<div class="waveform-bar h-10" style="animation-delay: 0.2s"></div>
+<div class="waveform-bar h-5" style="animation-delay: 0.4s"></div>
+<div class="waveform-bar h-9" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar h-7" style="animation-delay: 0.6s"></div>
+<div class="waveform-bar h-4" style="animation-delay: 0.3s"></div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6 relative overflow-hidden group hover:border-zinc-600 transition-colors">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-white">schedule</span>
+</div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest">System Uptime</h3>
+<span class="material-icons-round text-emerald-500 text-sm">timer</span>
+</div>
+<div class="flex items-center justify-center h-20">
+<div class="text-3xl lg:text-4xl font-mono font-bold text-white tracking-widest">01:00:00</div>
+</div>
+<div class="text-center text-[10px] text-zinc-500 uppercase tracking-widest border-t border-zinc-800 pt-2">Since Last Reboot</div>
+</div>
+</section>
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<div class="lg:col-span-2 bg-card-dark border border-zinc-800 rounded-lg p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Ping History (ms) - Last 30m</h3>
+<div class="flex gap-2">
+<span class="text-[10px] text-zinc-600">AVG: 42ms</span>
+<span class="text-[10px] text-zinc-600">MAX: 58ms</span>
+</div>
+</div>
+<div class="h-48 w-full relative">
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="border-b border-zinc-800/50 w-full h-px"></div>
+<div class="border-b border-zinc-800/50 w-full h-px"></div>
+<div class="border-b border-zinc-800/50 w-full h-px"></div>
+<div class="border-b border-zinc-800/50 w-full h-px"></div>
+</div>
+<svg class="w-full h-full relative z-10" preserveAspectRatio="none" viewBox="0 0 800 200">
+<defs>
+<linearGradient id="pingGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#10B981" stop-opacity="0.1"></stop>
+<stop offset="100%" stop-color="#10B981" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M0,120 L50,110 L100,130 L150,115 L200,125 L250,90 L300,100 L350,110 L400,95 L450,105 L500,115 L550,100 L600,110 L650,85 L700,95 L750,105 L800,90 L800,200 L0,200 Z" fill="url(#pingGradient)"></path>
+<path d="M0,120 L50,110 L100,130 L150,115 L200,125 L250,90 L300,100 L350,110 L400,95 L450,105 L500,115 L550,100 L600,110 L650,85 L700,95 L750,105 L800,90" fill="none" stroke="#10B981" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<circle cx="250" cy="90" fill="#10B981" r="3"></circle>
+<circle cx="650" cy="85" fill="#10B981" r="3"></circle>
+</svg>
+</div>
+<div class="flex justify-between text-[10px] text-zinc-600 mt-2 font-mono">
+<span>-30m</span>
+<span>-20m</span>
+<span>-10m</span>
+<span>Now</span>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 rounded-lg p-6">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-6">System Resources</h3>
+<div class="space-y-8">
+<div>
+<div class="flex justify-between text-xs font-medium mb-2 uppercase tracking-wide font-mono">
+<span class="text-zinc-400">vCPU Usage</span>
+<span class="text-white">12%</span>
+</div>
+<div class="h-1.5 w-full bg-zinc-900 rounded overflow-hidden border border-zinc-800">
+<div class="bg-white h-full w-[12%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-medium mb-2 uppercase tracking-wide font-mono">
+<span class="text-zinc-400">RAM Allocation</span>
+<span class="text-white">45%</span>
+</div>
+<div class="h-1.5 w-full bg-zinc-900 rounded overflow-hidden border border-zinc-800">
+<div class="bg-zinc-500 h-full w-[45%]"></div>
+</div>
+<div class="text-[10px] text-zinc-600 mt-1 text-right">921MB / 2048MB</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-medium mb-2 uppercase tracking-wide font-mono">
+<span class="text-zinc-400">Process Load</span>
+<span class="text-white">Low</span>
+</div>
+<div class="flex gap-1">
+<div class="h-2 w-2 bg-emerald-500 rounded-sm"></div>
+<div class="h-2 w-2 bg-emerald-500 rounded-sm opacity-50"></div>
+<div class="h-2 w-2 bg-zinc-800 rounded-sm"></div>
+<div class="h-2 w-2 bg-zinc-800 rounded-sm"></div>
+<div class="h-2 w-2 bg-zinc-800 rounded-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-card-dark border border-zinc-800 rounded-lg p-6">
+<div class="flex items-center justify-between mb-4 border-b border-zinc-800 pb-4">
+<h3 class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Recent Events</h3>
+<button class="text-[10px] text-zinc-400 hover:text-white uppercase border border-zinc-700 px-2 py-1 rounded hover:bg-zinc-800 transition-colors">View All Logs</button>
+</div>
+<div class="font-mono text-xs space-y-2 h-32 overflow-y-auto custom-scrollbar pr-2">
+<div class="flex gap-4 group hover:bg-zinc-900/50 p-1 rounded transition-colors">
+<span class="text-zinc-600 select-none">12:45:01</span>
+<span class="text-emerald-500 font-bold select-none">INFO</span>
+<span class="text-zinc-300">Heartbeat acknowledged by Gateway.</span>
+</div>
+<div class="flex gap-4 group hover:bg-zinc-900/50 p-1 rounded transition-colors">
+<span class="text-zinc-600 select-none">12:44:55</span>
+<span class="text-emerald-500 font-bold select-none">INFO</span>
+<span class="text-zinc-300">Database pool healthy. 5 active connections.</span>
+</div>
+<div class="flex gap-4 group hover:bg-zinc-900/50 p-1 rounded transition-colors">
+<span class="text-zinc-600 select-none">12:44:30</span>
+<span class="text-blue-400 font-bold select-none">DEBUG</span>
+<span class="text-zinc-400">Shard #0 refreshed guild cache.</span>
+</div>
+<div class="flex gap-4 group hover:bg-zinc-900/50 p-1 rounded transition-colors">
+<span class="text-zinc-600 select-none">12:42:12</span>
+<span class="text-emerald-500 font-bold select-none">INFO</span>
+<span class="text-zinc-300">Joined voice channel: "Study Room 2" (Guild: 8492...).</span>
+</div>
+<div class="flex gap-4 group hover:bg-zinc-900/50 p-1 rounded transition-colors">
+<span class="text-zinc-600 select-none">12:40:05</span>
+<span class="text-yellow-500 font-bold select-none">WARN</span>
+<span class="text-zinc-300">Slight latency spike detected on node-1 (120ms).</span>
+</div>
+<div class="flex gap-4 group hover:bg-zinc-900/50 p-1 rounded transition-colors">
+<span class="text-zinc-600 select-none">12:35:00</span>
+<span class="text-emerald-500 font-bold select-none">INFO</span>
+<span class="text-zinc-300">Routine garbage collection complete.</span>
+</div>
+</div>
+</section>
+<footer class="text-center text-[10px] text-zinc-600 border-t border-zinc-800 mt-12 pt-6 pb-2">
+<p>LOFI BOT SYSTEM DASHBOARD • CONNECTED TO SHARD #0</p>
+</footer>
+</main>
+
+</body></html>

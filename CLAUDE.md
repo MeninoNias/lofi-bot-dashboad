@@ -13,19 +13,22 @@ Built with **Tauri 2.0** for a minimal footprint (~5 MB, ~30 MB RAM) and connect
 - **App identifier**: `com.lofi-bot.dashboard`
 - **Default window**: 1024×768, title "Lofi Bot Dashboard"
 
+## Golden Rules
+
+1. **Always use `bun` / `bunx`** — never `npm` or `npx`. This project uses Bun as its package manager and script runner.
+2. **Always use issue templates** — when creating GitHub issues, follow the templates in `.github/ISSUE_TEMPLATE/` (use `feature_request.md` for enhancements, `bug_report.md` for bugs). Title format: `[FEATURE] ...` or `[BUG] ...`.
+
 ## Build/Test Commands
 
 ```bash
-npm install              # Install dependencies
-npm run dev              # Start Rsbuild dev server (port 3000)
-npm run build            # Build frontend for production (output: dist/)
-npm run preview          # Preview production build
-npm run tauri dev        # Start Tauri dev mode (frontend + native window)
-npm run tauri build      # Build production desktop app
-npx tauri icon <png>     # Generate app icons from source image
+bun install              # Install dependencies
+bun run dev              # Start Rsbuild dev server (port 3000)
+bun run build            # Build frontend for production (output: dist/)
+bun run preview          # Preview production build
+bun run tauri dev        # Start Tauri dev mode (frontend + native window)
+bun run tauri build      # Build production desktop app
+bunx tauri icon <png>    # Generate app icons from source image
 ```
-
-> **Note:** `tauri.conf.json` uses `bun run dev` / `bun run build` as before-commands. If you use npm instead of bun, update the `beforeDevCommand` and `beforeBuildCommand` fields in `src-tauri/tauri.conf.json`.
 
 ## Architecture
 
@@ -42,20 +45,37 @@ lofi-bot-dashboard/
 ├── src/                       # React frontend
 │   ├── main.tsx               # React entry point (renders into #root)
 │   ├── App.tsx                # App root component (router)
+│   ├── index.css              # Tailwind v4 theme (inline @theme, CSS variables)
 │   ├── components/            # Reusable UI components
-│   │   ├── ui/                # shadcn/ui primitives
-│   │   └── stations/          # Station-specific components (dialogs, sheets)
-│   ├── hooks/                 # React Query hooks (use-stations, etc.)
-│   ├── lib/                   # Utilities (api-client)
+│   │   ├── ui/                # shadcn/ui primitives (button, card, dialog, etc.)
+│   │   ├── stations/          # Station-specific components (dialogs, sheets)
+│   │   ├── app-sidebar.tsx    # Navigation sidebar
+│   │   ├── auth-guard.tsx     # Protected route wrapper
+│   │   └── dashboard-layout.tsx # Sidebar + layout wrapper
+│   ├── hooks/                 # React Query hooks
+│   │   ├── use-stations.ts    # Station CRUD mutations & queries
+│   │   ├── use-health.ts      # Health status & API info queries
+│   │   ├── use-leaderboard.ts # Global & guild leaderboard queries
+│   │   └── use-mobile.ts      # Responsive breakpoint hook
+│   ├── lib/                   # Utilities
+│   │   ├── api-client.ts      # HTTP client (fetch, ApiError, auth header)
+│   │   ├── query-client.ts    # TanStack Query config (30s stale, no 401 retry)
+│   │   └── utils.ts           # cn() helper (clsx + tailwind-merge)
 │   ├── pages/                 # Route pages (one directory per domain)
 │   │   ├── auth/              # Login page
 │   │   ├── dashboard/         # Overview, controls, health
 │   │   ├── stations/          # Station management (CRUD)
 │   │   ├── users/             # Profiles, leaderboard
 │   │   └── settings/          # App settings
-│   ├── services/              # API service functions (station-service, etc.)
-│   ├── stores/                # Zustand stores (auth-store)
-│   └── types/                 # TypeScript types (api.ts)
+│   ├── services/              # API service functions
+│   │   ├── station-service.ts # Station CRUD + setDefault
+│   │   ├── health-service.ts  # Health status & API info
+│   │   ├── leaderboard-service.ts # Leaderboard queries
+│   │   └── profile-service.ts # User profile queries
+│   ├── stores/                # Zustand stores
+│   │   └── auth-store.ts      # API key + base URL (persisted to localStorage)
+│   └── types/                 # TypeScript types
+│       └── api.ts             # API response types (Station, HealthStatus, etc.)
 ├── src-tauri/                 # Tauri / Rust backend
 │   ├── src/
 │   │   ├── main.rs            # Tauri entry point (calls lib::run)
@@ -66,11 +86,18 @@ lofi-bot-dashboard/
 │   ├── build.rs               # Tauri build script
 │   ├── Cargo.toml             # Rust dependencies
 │   └── tauri.conf.json        # Tauri configuration
+├── .github/                   # GitHub config
+│   ├── workflows/release.yml  # Release-please automation
+│   ├── ISSUE_TEMPLATE/        # Bug report & feature request templates
+│   ├── pull_request_template.md
+│   └── dependabot.yml         # Dependency update automation
 ├── docs/mock/                 # HTML design mocks (reference only)
-├── index.html                 # HTML template
+├── index.html                 # HTML template (loads JetBrains Mono)
+├── components.json            # shadcn/ui config (new-york style, Lucide icons)
+├── postcss.config.mjs         # PostCSS with @tailwindcss/postcss
 ├── rsbuild.config.ts          # Rsbuild configuration
 ├── tsconfig.json              # TypeScript configuration
-└── package.json               # Node.js dependencies & scripts
+└── package.json               # Dependencies & scripts
 ```
 
 ### Page Organization
@@ -97,8 +124,25 @@ Each directory has an `index.ts` barrel export. Routes are defined in `App.tsx`.
 | Styling | Tailwind CSS v4 |
 | UI Components | shadcn/ui |
 | Routing | React Router v7 |
-| Data Fetching | TBD — TanStack Query |
-| State Management | TBD — Zustand |
+| Data Fetching | TanStack Query v5 |
+| State Management | Zustand v5 (with persist) |
+| Icons | Lucide React |
+
+### API Client & Data Layer
+
+**API client** (`lib/api-client.ts`):
+- Custom `ApiError` class with `statusCode` and optional `body`
+- Sends `X-API-Key` header from Zustand auth store
+- Auto-clears auth and redirects on 401 responses
+- Base URL from `PUBLIC_LOFI_BOT_API_URL` env var (default: `http://localhost:3000`)
+
+**Query client** (`lib/query-client.ts`):
+- 30s stale time, no refetch on window focus
+- Retries up to 2 times (skips retry on 401)
+
+**Auth store** (`stores/auth-store.ts`):
+- Zustand with `persist` middleware (localStorage key: `lofi-auth`)
+- Stores `apiKey` — set on login, cleared on 401 or logout
 
 ### Communication
 
@@ -114,11 +158,18 @@ The bot is a separate repo. The dashboard consumes its REST API.
 - **HTTP framework**: Elysia.js (exposes REST API)
 - **Bot framework**: Discord.js
 - **Database**: PostgreSQL (Drizzle ORM)
-- **Auth**: API key via header
+- **Auth**: API key via `X-API-Key` header
 - **Bot commands**: `!play`, `!stop`, `!stations`, `!addstation`, `!removestation`, `!setdefault`
-- **API endpoints needed by dashboard**:
-  - `GET/POST/PUT/DELETE /api/stations` — station CRUD
-  - `GET /api/status` — bot status and health
+- **API endpoints consumed by dashboard**:
+  - `GET /` — API info (name, version, endpoints)
+  - `GET /health` — bot health status (also used for API key validation)
+  - `GET /api/stations` — list all stations
+  - `POST /api/stations` — create station
+  - `DELETE /api/stations/:id` — delete station
+  - `PUT /api/stations/:id/default` — set default station
+  - `GET /api/leaderboard?limit=N` — global leaderboard
+  - `GET /api/guilds/:guildId/leaderboard?limit=N` — guild leaderboard
+  - `GET /api/users/:userId/profile` — user profile
   - CORS must be enabled in Elysia.js
 
 ### Tauri 2.0 Capabilities
@@ -128,6 +179,18 @@ Permissions are defined in `src-tauri/capabilities/default.json`. The default ca
 - `core:default` — standard Tauri core permissions
 - `core:window:allow-set-title` — allows setting the window title at runtime
 
+### Tailwind CSS v4
+
+Uses the new Tailwind v4 architecture — **no `tailwind.config.js`**. All theme configuration lives in `src/index.css` via `@theme inline` and CSS custom properties. PostCSS integration via `@tailwindcss/postcss` in `postcss.config.mjs`. shadcn/ui configured with `new-york` style in `components.json`.
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PUBLIC_LOFI_BOT_API_URL` | `http://localhost:3000` | Bot API base URL |
+
+Set in `.env` file at project root. Accessed via `import.meta.env.PUBLIC_LOFI_BOT_API_URL`.
+
 ## Design System — Monospaced Lofi
 
 A terminal-inspired, monochrome design language. Reference mock: `docs/mock/desiner-system.html`
@@ -135,7 +198,7 @@ A terminal-inspired, monochrome design language. Reference mock: `docs/mock/desi
 ### Typography
 
 - **Font**: JetBrains Mono (monospace) — all UI text
-- **Weights**: Light (300), Regular (400), Medium (500), Bold (700)
+- **Weights**: Light (300), Regular (400), Medium (500), SemiBold (600), Bold (700)
 - **Scale**:
   - Display: `text-5xl font-bold tracking-tighter`
   - Section: `text-2xl font-bold uppercase tracking-tight`
@@ -164,11 +227,11 @@ A terminal-inspired, monochrome design language. Reference mock: `docs/mock/desi
 - **Cards**: `bg-card-dark border border-zinc-800 rounded-lg`
 - **Status indicator**: `w-2 h-2 bg-emerald-500 rounded-full animate-pulse`
 - **Station cards**: Grayscale images → colorize on hover
-- **Icons**: Google Material Icons Round, 24px base
+- **Icons**: Lucide React, 24px base
 
 ## Prerequisites
 
-- **Node.js** (for npm/frontend tooling) — or **Bun** (tauri.conf.json currently references bun)
+- **Bun** (package manager and script runner)
 - **Rust** (for Tauri/Cargo compilation)
 - Tauri system dependencies: see [Tauri Prerequisites](https://v2.tauri.app/start/prerequisites/)
 
@@ -203,6 +266,9 @@ A terminal-inspired, monochrome design language. Reference mock: `docs/mock/desi
 
 ### Issue Guidelines
 
+- **Always use the templates** in `.github/ISSUE_TEMPLATE/` when creating issues:
+  - `feature_request.md` → sections: Description, Use Case, Proposed Solution (title prefix: `[FEATURE]`)
+  - `bug_report.md` → sections: Description, Steps to Reproduce, Expected/Actual Behavior, Environment (title prefix: `[BUG]`)
 - Use labels to categorize issues (combine multiple: e.g. `enhancement` + `frontend` + `ui/ux`)
 - Assign issues to the appropriate milestone based on scope
 - Reference the backend repo when issues involve API integration
