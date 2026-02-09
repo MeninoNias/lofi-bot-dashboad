@@ -86,3 +86,8 @@ export interface PlayInGuildInput {
   stationId: number;
   channelId: string;
 }
+
+export interface BotVersion {
+  version: string;
+  healthy: boolean;
+}

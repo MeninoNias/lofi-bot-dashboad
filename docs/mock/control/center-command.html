@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard Overview Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#F8FAFC", 
+                        secondary: "#94A3B8",
+                        "background-light": "#F1F5F9",
+                        "background-dark": "#09090b", 
+                        "card-dark": "#18181b", 
+                        "sidebar-dark": "#101012", 
+                        "accent-gray": "#475569",
+                        "mono-50": "#f9fafb",
+                        "mono-100": "#f3f4f6",
+                        "mono-200": "#e5e7eb",
+                        "mono-300": "#d1d5db",
+                        "mono-400": "#9ca3af",
+                        "mono-500": "#6b7280",
+                        "mono-600": "#4b5563",
+                        "mono-700": "#374151",
+                        "mono-800": "#1f2937",
+                        "mono-900": "#111827",
+                    },
+                    fontFamily: {
+                        sans: ["JetBrains Mono", "monospace"],
+                        display: ["JetBrains Mono", "monospace"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "4px",
+                        'lg': '8px',
+                        'xl': '12px',
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .waveform-bar {
+            width: 2px;
+            background: #10b981;
+            border-radius: 1px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { height: 4px; }
+            50% { height: 12px; }
+        }
+        .mini-pulse {
+            width: 6px;
+            height: 6px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-200 min-h-screen flex custom-scrollbar selection:bg-white selection:text-black overflow-hidden">
+<aside class="w-64 fixed h-screen bg-sidebar-dark border-r border-zinc-800 flex flex-col z-20">
+<div class="p-8 border-b border-zinc-800">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-2xl text-emerald-500">terminal</span>
+<div>
+<h1 class="font-bold text-white text-sm tracking-tight">LOFI BOT</h1>
+<p class="text-[10px] text-zinc-500 uppercase tracking-widest">v2.4.0 • Online</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded bg-zinc-800 text-white border border-zinc-700 transition-colors" href="#">
+<span class="material-icons-round text-base">grid_view</span> Overview
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">dns</span> Servers
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">library_music</span> Library
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">bar_chart</span> Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">terminal</span> Logs
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-sm rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors" href="#">
+<span class="material-icons-round text-base">settings</span> Config
+            </a>
+</nav>
+<div class="p-4 border-t border-zinc-800">
+<div class="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded text-xs">
+<div class="flex items-center justify-between mb-2">
+<span class="text-zinc-400">Shard #04</span>
+<span class="text-emerald-500 font-bold">● Stable</span>
+</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full w-[98%]"></div>
+</div>
+<div class="mt-2 text-[10px] text-zinc-600 font-mono">Ping: 14ms</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 ml-64 p-8 lg:p-12 max-w-7xl w-full">
+<header class="mb-10 flex justify-between items-end">
+<div>
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-zinc-900 rounded text-[10px] uppercase tracking-widest text-emerald-500 mb-2 border border-emerald-500/20">
+<span class="mini-pulse"></span> System Operational
+                </div>
+<h1 class="text-3xl font-bold text-white tracking-tight">Command Center</h1>
+<p class="text-zinc-500 text-sm mt-1">Real-time metrics for Shard Cluster US-East-1</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-700 hover:border-zinc-500 rounded text-xs text-zinc-300 hover:text-white transition-all">
+<span class="material-icons-round text-sm">refresh</span> Refresh
+                </button>
+</div>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="bg-card-dark border border-zinc-800 p-6 rounded-lg hover:border-zinc-700 transition-all group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-white">dns</span>
+</div>
+<h3 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Connected Servers</h3>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white tracking-tighter">8,492</span>
+<span class="text-emerald-500 text-xs font-medium flex items-center gap-1">
+<span class="material-icons-round text-[10px]">arrow_upward</span> +12
+                    </span>
+</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full mt-4 overflow-hidden">
+<div class="bg-white h-full w-[85%]"></div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 p-6 rounded-lg hover:border-zinc-700 transition-all group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-white">headphones</span>
+</div>
+<h3 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">Active Listeners</h3>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white tracking-tighter">142,801</span>
+<span class="text-emerald-500 text-xs font-medium flex items-center gap-1">
+<span class="material-icons-round text-[10px]">arrow_upward</span> +5.2%
+                    </span>
+</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full mt-4 overflow-hidden">
+<div class="bg-emerald-500 h-full w-[65%]"></div>
+</div>
+</div>
+<div class="bg-card-dark border border-zinc-800 p-6 rounded-lg hover:border-zinc-700 transition-all group relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-icons-round text-6xl text-white">timer</span>
+</div>
+<h3 class="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-2">System Uptime</h3>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-white tracking-tighter">99.9%</span>
+<span class="text-zinc-500 text-xs font-mono">14d 02h 12m</span>
+</div>
+<div class="w-full bg-zinc-800 h-1 rounded-full mt-4 overflow-hidden">
+<div class="bg-emerald-500 h-full w-[99.9%]"></div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<section class="lg:col-span-2">
+<div class="bg-card-dark border border-zinc-800 rounded-lg h-full flex flex-col">
+<div class="p-6 border-b border-zinc-800 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-zinc-400">graphic_eq</span>
+<h2 class="text-sm font-bold text-white uppercase tracking-widest">Top Active Streams</h2>
+</div>
+<span class="text-[10px] text-zinc-500 uppercase tracking-widest border border-zinc-700 px-2 py-1 rounded bg-zinc-900">Live Feed</span>
+</div>
+<div class="p-6 space-y-4 flex-1">
+<div class="group flex items-center gap-4 p-4 bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-lg transition-all cursor-pointer">
+<div class="relative w-12 h-12 rounded bg-zinc-800 overflow-hidden shrink-0">
+<img alt="Guild Icon" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIDgunVE5nF2QS022tIlOqZBJ2qERAzCtomDCIOv24VPQAiB0ehpySPzpAsL5hhMUueD_RFHD9hJzHgtx19M09d1ZjHfvB5tdTHm_7VkMjxM9ARXlvWU4z9N1JQIsQqZ30o-DG_9ymCrjrJdeCi5ImG1TAxat8WVqDxzVio6lnahkW0G4qDPT80xexVIhJ0Jy0MCo2Zk1Ur9kUW29piG390Ocl_LvpBv9btm48VNEoUy0u3CqfXjbb2E760JwbhkABCXNrQvpSwqc"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-sm font-bold text-white truncate">Devs &amp; Designers Hub</h4>
+<div class="flex items-center gap-1">
+<div class="flex items-end gap-[2px] h-3">
+<div class="waveform-bar h-2" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar h-3" style="animation-delay: 0.3s"></div>
+<div class="waveform-bar h-1" style="animation-delay: 0.2s"></div>
+</div>
+<span class="text-[10px] text-emerald-500 uppercase font-bold ml-1">Live</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-xs text-zinc-400 truncate font-mono">Playing: "Midnight Chill" - Lofi Girl</p>
+<span class="text-xs text-white font-mono bg-zinc-800 px-2 py-0.5 rounded">342 listeners</span>
+</div>
+</div>
+</div>
+<div class="group flex items-center gap-4 p-4 bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-lg transition-all cursor-pointer">
+<div class="relative w-12 h-12 rounded bg-zinc-800 overflow-hidden shrink-0">
+<img alt="Guild Icon" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAzchnP347RMrF3zq10BuZjU_kbuVkAaBVDaZXAtg51UWH0-4sYnXw12hlOaAxTsobGq2Y7yWWMNUi5xLdckOZ-aYOcdDiDZ9kSy948_qB2m4xjsk0nLbASqnxdzrd__wrREJdWe9NreVjAhDTBtXhjhljVi2_2C3eQIRhNX_VZ9b_UutQ9aUWOOruH5c_G0i-RwFG9m3oT7B46WOne__ogWN1I7ejPfsNcVz0R6kvvdwV7BGgbHxorSljfNpcfEaegzPFyvtOwPM"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-sm font-bold text-white truncate">Study Together Global</h4>
+<div class="flex items-center gap-1">
+<div class="flex items-end gap-[2px] h-3">
+<div class="waveform-bar h-1" style="animation-delay: 0.4s"></div>
+<div class="waveform-bar h-3" style="animation-delay: 0.1s"></div>
+<div class="waveform-bar h-2" style="animation-delay: 0.5s"></div>
+</div>
+<span class="text-[10px] text-emerald-500 uppercase font-bold ml-1">Live</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-xs text-zinc-400 truncate font-mono">Playing: "Rainy Nights" - Nature Beats</p>
+<span class="text-xs text-white font-mono bg-zinc-800 px-2 py-0.5 rounded">208 listeners</span>
+</div>
+</div>
+</div>
+<div class="group flex items-center gap-4 p-4 bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-600 rounded-lg transition-all cursor-pointer">
+<div class="relative w-12 h-12 rounded bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700">
+<span class="material-icons-round text-zinc-500">group</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-sm font-bold text-white truncate">The Late Night Cafe</h4>
+<div class="flex items-center gap-1">
+<div class="flex items-end gap-[2px] h-3">
+<div class="waveform-bar h-3" style="animation-delay: 0.2s"></div>
+<div class="waveform-bar h-1" style="animation-delay: 0.6s"></div>
+<div class="waveform-bar h-2" style="animation-delay: 0.3s"></div>
+</div>
+<span class="text-[10px] text-emerald-500 uppercase font-bold ml-1">Live</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-xs text-zinc-400 truncate font-mono">Playing: "Coffee Shop Vibes"</p>
+<span class="text-xs text-white font-mono bg-zinc-800 px-2 py-0.5 rounded">156 listeners</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-zinc-800">
+<button class="w-full py-2 text-xs font-bold text-zinc-500 uppercase hover:text-white transition-colors flex items-center justify-center gap-2">
+                            View All Active Streams <span class="material-icons-round text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<section class="lg:col-span-1">
+<div class="bg-card-dark border border-zinc-800 rounded-lg h-full flex flex-col">
+<div class="p-6 border-b border-zinc-800">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-zinc-400">tune</span>
+<h2 class="text-sm font-bold text-white uppercase tracking-widest">Quick Controls</h2>
+</div>
+</div>
+<div class="p-6 space-y-6 flex-1">
+<div class="p-4 rounded border border-red-900/30 bg-red-900/10">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-icons-round text-red-500 text-sm">warning</span>
+<h4 class="text-xs font-bold text-red-400 uppercase tracking-widest">Emergency Zone</h4>
+</div>
+<p class="text-[10px] text-zinc-400 mb-4 leading-relaxed">
+                                Instantly disconnect bot from all voice channels. Use only in case of API rate limits or bugs.
+                            </p>
+<button class="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 hover:border-red-500 transition-all px-4 py-2 rounded text-xs font-bold uppercase tracking-wide flex items-center justify-center gap-2 group">
+<span class="material-icons-round text-sm group-hover:animate-pulse">stop_circle</span> Stop All Players
+                            </button>
+</div>
+<div class="space-y-3">
+<label class="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block">Global Actions</label>
+<button class="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-600 rounded text-left transition-all group">
+<span class="text-xs text-white font-mono group-hover:text-emerald-400">Restart Shards</span>
+<span class="material-icons-round text-zinc-600 text-sm group-hover:text-white">restart_alt</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-600 rounded text-left transition-all group">
+<span class="text-xs text-white font-mono group-hover:text-emerald-400">Clear Cache</span>
+<span class="material-icons-round text-zinc-600 text-sm group-hover:text-white">cleaning_services</span>
+</button>
+</div>
+<div class="pt-4 border-t border-zinc-800">
+<a class="block text-center p-3 bg-white text-black hover:bg-zinc-200 transition-colors rounded text-sm font-bold uppercase tracking-wide shadow-lg shadow-white/5" href="#">
+                                Open Full Controls
+                            </a>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+
+</body></html>
